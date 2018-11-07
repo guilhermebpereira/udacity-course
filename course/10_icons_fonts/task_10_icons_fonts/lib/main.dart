@@ -26,8 +26,8 @@ class UnitConverterApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Unit Converter',
       theme: ThemeData(
-        // TODO: fill in the fontFamily property
         textTheme: Theme.of(context).textTheme.apply(
+              fontFamily: 'Raleway',
               bodyColor: Colors.black,
               displayColor: Colors.grey[600],
             ),
