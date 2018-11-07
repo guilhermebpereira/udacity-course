@@ -6,17 +6,23 @@
 // https://www.dartlang.org/guides/language/effective-dart/style#ordering
 import 'package:flutter/material.dart';
 
+const double _height = 100.0;
+const double _borderRadius = _height / 2;
+
 /// A custom [Category] widget.
 ///
 /// The widget is composed on an [Icon] and [Text]. Tapping on the widget shows
 /// a colored [InkWell] animation.
 class Category extends StatelessWidget {
+  String name;
+  Color highlightColor;
+  IconData icon;
+
   /// Creates a [Category].
   ///
   /// A [Category] saves the name of the Category (e.g. 'Length'), its color for
   /// the UI, and the icon that represents it (e.g. a ruler).
-  // TODO: You'll need the name, color, and iconLocation from main.dart
-  const Category();
+  Category({this.name, this.highlightColor, this.icon});
 
   /// Builds a custom widget that shows [Category] information.
   ///
@@ -27,7 +33,32 @@ class Category extends StatelessWidget {
   // Theme ancestor in the tree. Below, we obtain the display1 text theme.
   // See https://docs.flutter.io/flutter/material/Theme-class.html
   Widget build(BuildContext context) {
-    // TODO: Build the custom widget here, referring to the Specs.
-    return Container();
+    return Container(
+        height: _height,
+        padding: EdgeInsets.all(8.0),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(_borderRadius),
+          highlightColor: highlightColor,
+          splashColor: highlightColor,
+          onTap: () { print('I was tapped'); },
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Icon(
+                  icon,
+                  size: 60.0,
+                ),
+              ),
+              Center(
+                child: Text(
+                  name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 24.0),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }
