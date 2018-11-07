@@ -9,6 +9,7 @@ import 'package:meta/meta.dart';
 
 import 'api.dart';
 import 'category.dart';
+import 'http_error_message.dart';
 import 'unit.dart';
 
 const _padding = EdgeInsets.all(16.0);
@@ -36,7 +37,7 @@ class _UnitConverterState extends State<UnitConverter> {
   List<DropdownMenuItem> _unitMenuItems;
   bool _showValidationError = false;
   final _inputKey = GlobalKey(debugLabel: 'inputText');
-  // TODO: Add a flag for whether to show error UI
+  bool _showHttpError = false;
 
   @override
   void initState() {
@@ -109,10 +110,13 @@ class _UnitConverterState extends State<UnitConverter> {
       final api = Api();
       final conversion = await api.convert(apiCategory['route'],
           _inputValue.toString(), _fromValue.name, _toValue.name);
-      // TODO: Check whether to show an error UI
-      setState(() {
-        _convertedValue = _format(conversion);
-      });
+      if (conversion != null) {
+        setState(() {
+          _convertedValue = _format(conversion);
+        });
+      } else {
+        _showHttpError = true;
+      }
     } else {
       // For the static units, we do the conversion ourselves
       setState(() {
@@ -184,8 +188,8 @@ class _UnitConverterState extends State<UnitConverter> {
       child: Theme(
         // This sets the color of the [DropdownMenuItem]
         data: Theme.of(context).copyWith(
-              canvasColor: Colors.grey[50],
-            ),
+          canvasColor: Colors.grey[50],
+        ),
         child: DropdownButtonHideUnderline(
           child: ButtonTheme(
             alignedDropdown: true,
@@ -273,24 +277,29 @@ class _UnitConverterState extends State<UnitConverter> {
       ],
     );
 
-    // Based on the orientation of the parent widget, figure out how to best
-    // lay out our converter.
-    return Padding(
-      padding: _padding,
-      child: OrientationBuilder(
-        builder: (BuildContext context, Orientation orientation) {
-          if (orientation == Orientation.portrait) {
-            return converter;
-          } else {
-            return Center(
-              child: Container(
-                width: 450.0,
-                child: converter,
-              ),
-            );
-          }
-        },
-      ),
-    );
+    if (widget.category.units == null ||
+        (widget.category.name == apiCategory['name'] && _showHttpError)) {
+      return HttpErrorMessage();
+    } else {
+      // Based on the orientation of the parent widget, figure out how to best
+      // lay out our converter.
+      return Padding(
+        padding: _padding,
+        child: OrientationBuilder(
+          builder: (BuildContext context, Orientation orientation) {
+            if (orientation == Orientation.portrait) {
+              return converter;
+            } else {
+              return Center(
+                child: Container(
+                  width: 450.0,
+                  child: converter,
+                ),
+              );
+            }
+          },
+        ),
+      );
+    }
   }
 }

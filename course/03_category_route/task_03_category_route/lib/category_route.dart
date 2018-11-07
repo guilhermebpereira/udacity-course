@@ -3,11 +3,9 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'category.dart';
 
-// TODO: Check if we need to import anything
-
-// TODO: Define any constants
-
+final _backgroundColor = Colors.green[100];
 /// Category Route (screen).
 ///
 /// This is the 'home' screen of the Unit Converter. It shows a header and
@@ -42,19 +40,31 @@ class CategoryRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Create a list of the eight Categories, using the names and colors
-    // from above. Use a placeholder icon, such as `Icons.cake` for each
-    // Category. We'll add custom icons later.
+    final listView = ListView.builder(
+        itemCount: _categoryNames.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Category(
+            color: _baseColors[index],
+            iconLocation: Icons.cake,
+            name: _categoryNames[index],
+          );
+        });
 
-    // TODO: Create a list view of the Categories
-    final listView = Container();
-
-    // TODO: Create an App Bar
-    final appBar = AppBar();
+    final appBar = AppBar(
+      title: Text(
+        'Unit Converter',
+        style: TextStyle(fontSize: 30.0, color: Colors.black),
+      ),
+      backgroundColor: _backgroundColor,
+    );
 
     return Scaffold(
       appBar: appBar,
-      body: listView,
+      body: Padding(
+        child: listView,
+        padding: EdgeInsets.all(8.0),
+      ),
+      backgroundColor: _backgroundColor,
     );
   }
 }

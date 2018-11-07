@@ -5,24 +5,30 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import 'package:task_04_navigation/unit.dart';
+import 'unit.dart';
 
 /// Converter screen where users can input amounts to convert.
 ///
 /// Currently, it just displays a list of mock units.
 ///
-/// While it is named ConverterRoute, a more apt name would be ConverterScreen,
+/// While it is named ConverterScreen, a more apt name would be ConverterScreen,
 /// because it is responsible for the UI at the route's destination.
-class ConverterRoute extends StatelessWidget {
+class ConverterScreen extends StatelessWidget {
   /// Units for this [Category].
   final List<Unit> units;
+  final String name;
+  final Color color;
 
-  /// This [ConverterRoute] requires the name, color, and units to not be null.
+  /// This [ConverterScreen] requires the name, color, and units to not be null.
   // TODO: Pass in the [Category]'s name and color
-  const ConverterRoute({
+  const ConverterScreen({
     @required this.units,
-  }) : assert(units != null);
-
+    @required this.name,
+    @required this.color
+  }) : assert(units != null),
+       assert(name !=  null),
+       assert(color != null);
+       
   @override
   Widget build(BuildContext context) {
     // Here is just a placeholder for a list of mock units
@@ -31,6 +37,7 @@ class ConverterRoute extends StatelessWidget {
       return Container(
         margin: EdgeInsets.all(8.0),
         padding: EdgeInsets.all(16.0),
+        color: color,
         child: Column(
           children: <Widget>[
             Text(

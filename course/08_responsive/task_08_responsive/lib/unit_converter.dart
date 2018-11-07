@@ -32,7 +32,6 @@ class _UnitConverterState extends State<UnitConverter> {
   String _convertedValue = '';
   List<DropdownMenuItem> _unitMenuItems;
   bool _showValidationError = false;
-  // TODO: Pass this into the TextField so that the input value persists
   final _inputKey = GlobalKey(debugLabel: 'inputText');
 
   @override
@@ -168,8 +167,8 @@ class _UnitConverterState extends State<UnitConverter> {
       child: Theme(
         // This sets the color of the [DropdownMenuItem]
         data: Theme.of(context).copyWith(
-              canvasColor: Colors.grey[50],
-            ),
+          canvasColor: Colors.grey[50],
+        ),
         child: DropdownButtonHideUnderline(
           child: ButtonTheme(
             alignedDropdown: true,
@@ -197,6 +196,7 @@ class _UnitConverterState extends State<UnitConverter> {
           // You can read more about it here: https://flutter.io/text-input
           TextField(
             style: Theme.of(context).textTheme.display1,
+            key: _inputKey,
             decoration: InputDecoration(
               labelStyle: Theme.of(context).textTheme.display1,
               errorText: _showValidationError ? 'Invalid number entered' : null,
@@ -246,21 +246,27 @@ class _UnitConverterState extends State<UnitConverter> {
       ),
     );
 
-    // TODO: Use a ListView instead of a Column
-    final converter = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        input,
-        arrows,
-        output,
-      ],
+    final converter = ListView(
+      children: <Widget>[input, arrows, output],
     );
 
-    // TODO: Use an OrientationBuilder to add a width to the unit converter
-    // in landscape mode
-    return Padding(
-      padding: _padding,
-      child: converter,
+    return OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        if (orientation == Orientation.portrait) {
+          return Container(
+            padding: _padding,
+            child: converter,
+          );
+        } else {
+          return Center(
+            child: Container(
+              padding: _padding,
+              child: converter,
+              width: 450.0,
+            ),
+          );
+        }
+      },
     );
   }
 }

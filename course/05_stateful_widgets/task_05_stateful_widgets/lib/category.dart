@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 // @required is defined in the meta.dart package
 import 'package:meta/meta.dart';
 
-import 'package:task_05_stateful_widgets/converter_route.dart';
-import 'package:task_05_stateful_widgets/unit.dart';
+import 'converter_route.dart';
+import 'unit.dart';
 
 // We use an underscore to indicate that these variables are private.
 // See https://www.dartlang.org/guides/language/effective-dart/design#libraries
