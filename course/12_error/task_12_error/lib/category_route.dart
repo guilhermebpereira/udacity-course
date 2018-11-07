@@ -82,8 +82,6 @@ class _CategoryRouteState extends State<CategoryRoute> {
     'assets/icons/power.png',
     'assets/icons/currency.png',
   ];
-  static bool _isLoading = false;
-  static bool _showHttpError = false;
 
   @override
   Future<void> didChangeDependencies() async {
@@ -94,9 +92,7 @@ class _CategoryRouteState extends State<CategoryRoute> {
     // We only want to load our data in once
     if (_categories.isEmpty) {
       await _retrieveLocalCategories();
-      _isLoading = true;
       await _retrieveApiCategory();
-      _isLoading = false;
     }
   }
 
@@ -104,7 +100,8 @@ class _CategoryRouteState extends State<CategoryRoute> {
   Future<void> _retrieveLocalCategories() async {
     // Consider omitting the types for local variables. For more details on Effective
     // Dart Usage, see https://www.dartlang.org/guides/language/effective-dart/usage
-    final json = DefaultAssetBundle.of(context)
+    final json = DefaultAssetBundle
+        .of(context)
         .loadString('assets/data/regular_units.json');
     final data = JsonDecoder().convert(await json);
     if (data is! Map) {
@@ -160,17 +157,13 @@ class _CategoryRouteState extends State<CategoryRoute> {
           iconLocation: _icons.last,
         ));
       });
-    } else {
-      _showHttpError = true;
     }
   }
 
   /// Function to call when a [Category] is tapped.
   void _onCategoryTap(Category category) {
     setState(() {
-      if (!_isLoading && !_showHttpError) {
-        _currentCategory = category;
-      }
+      _currentCategory = category;
     });
   }
 
@@ -182,9 +175,13 @@ class _CategoryRouteState extends State<CategoryRoute> {
     if (deviceOrientation == Orientation.portrait) {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
+          var _category = _categories[index];
           return CategoryTile(
-            category: _categories[index],
-            onTap: !_isLoading && !_showHttpError ? _onCategoryTap : null,
+            category: _category,
+            onTap:
+                _category.name == apiCategory['name'] && _category.units.isEmpty
+                    ? null
+                    : _onCategoryTap,
           );
         },
         itemCount: _categories.length,
